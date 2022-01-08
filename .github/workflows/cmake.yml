@@ -48,12 +48,17 @@ jobs:
             -DOPENCV_EXTRA_MODULES_PATH=${{github.workspace}}/thirdparty/opencv_contrib-4.5.5/modules
             -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/thirdparty/opencv-4.5.5/.install
             -DBUILD_LIST="core,imgproc,calib3d,highgui,features2d,flann,cudev,cudafeatures2d"
-            && make install -j4
+            && make install -j2
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
-      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+      run: >
+           cmake
+           -B ${{github.workspace}}/build
+           -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+           -DBUILD_SHARED_LIBS=OFF
+           -DOpenCV_DIR=${{github.workspace}}/thirdparty/opencv-4.5.5/.install/lib/cmake/opencv4
 
     - name: Build
       # Build your program with the given configuration
