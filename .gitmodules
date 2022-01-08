@@ -1,0 +1,9 @@
+[submodule "thirdparty/cmdline"]
+	path = thirdparty/cmdline
+	url = https://github.com/tanakh/cmdline
+[submodule "thirdparty/fast_akaze"]
+	path = thirdparty/fast_akaze
+	url = https://github.com/donlk/fast_akaze
+[submodule "thirdparty/cuda_akaze"]
+	path = thirdparty/cuda_akaze
+	url = https://github.com/donlk/cuda-akaze
