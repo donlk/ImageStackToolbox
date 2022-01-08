@@ -52,6 +52,7 @@ jobs:
             export PATH="/usr/lib/ccache:/usr/local/opt/ccache/libexec:$PATH"
             && cmake ../
             -DWITH_CUDA=ON
+            -DCMAKE_CUDA_COMPILER_LAUNCHER=ccache
             -DOPENCV_EXTRA_MODULES_PATH=${{github.workspace}}/thirdparty/opencv_contrib-4.5.5/modules
             -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/thirdparty/opencv-4.5.5/.install
             -DBUILD_LIST="core,imgproc,calib3d,highgui,features2d,flann,cudev,cudafeatures2d"
@@ -66,6 +67,7 @@ jobs:
            -B ${{github.workspace}}/build
            -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
            -DBUILD_SHARED_LIBS=OFF
+           -DCMAKE_CUDA_COMPILER_LAUNCHER=ccache
            -DOpenCV_DIR=${{github.workspace}}/thirdparty/opencv-4.5.5/.install/lib/cmake/opencv4
 
     - name: Build
