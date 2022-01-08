@@ -24,6 +24,9 @@ jobs:
 
     - name: cmake-version
       run: cmake --version
+      
+    - name: ccache-version
+      run: ccache --version
     
     - name: cuda-toolkit 
       uses: Jimver/cuda-toolkit@v0.2.5
