@@ -22,10 +22,12 @@ jobs:
       with:
             submodules: 'recursive'
 
+    - name: cmake-version
+      run: cmake --version
     
     - name: cuda-toolkit 
       uses: Jimver/cuda-toolkit@v0.2.5
-      
+    
     - name: ccache
       uses: hendrikmuhs/ccache-action@v1
       
