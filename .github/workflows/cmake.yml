@@ -42,7 +42,8 @@ jobs:
       working-directory: ./thirdparty/ccache-4.5.1/.build
       run:  >
             cmake ../
-            -DCMAKE_CUDA_COMPILER_LAUNCHER=ccache
+            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+            -DCMAKE_C_COMPILER_LAUNCHER=ccache
             -DZSTD_FROM_INTERNET=ON
             -DHIREDIS_FROM_INTERNET=ON
             -DCMAKE_BUILD_TYPE=Release
