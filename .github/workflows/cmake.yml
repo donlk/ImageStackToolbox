@@ -52,8 +52,9 @@ jobs:
             
     - name: Added ccache support for NVCC compiler invocation
       run: |
-            sed '/^set(CUDA_NVCC_EXECUTABLE.*/i set(CMAKE_CUDA_COMPILER_LAUNCHER "@CMAKE_CUDA_COMPILER_LAUNCHER@") # path' /usr/local/share/cmake-3.22/Modules/FindCUDA/run_nvcc.cmake
-            sed ':a;N;$!ba;s/-M\n  ${CUDACC_DEFINE}/-dc -x cu\n  ${CUDACC_DEFINE}/g' /usr/local/share/cmake-3.22/Modules/FindCUDA/run_nvcc.cmake
+            sed -i '/^set(CUDA_NVCC_EXECUTABLE.*/i set(CMAKE_CUDA_COMPILER_LAUNCHER "@CMAKE_CUDA_COMPILER_LAUNCHER@") # path' /usr/local/share/cmake-3.22/Modules/FindCUDA/run_nvcc.cmake
+            sed -i ':a;N;$!ba;s/-M\n  ${CUDACC_DEFINE}/-dc -x cu\n  ${CUDACC_DEFINE}/g' /usr/local/share/cmake-3.22/Modules/FindCUDA/run_nvcc.cmake
+            cat /usr/local/share/cmake-3.22/Modules/FindCUDA/run_nvcc.cmake
             
     - name: Install cuda-toolkit 
       uses: Jimver/cuda-toolkit@v0.2.5
