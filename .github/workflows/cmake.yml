@@ -52,6 +52,7 @@ jobs:
             
     - name: cmake-cat
       run: |
+            sudo find / -iname "run_nvcc.cmake"
             ls -l /usr/share/cmake*
             cat /usr/share/cmake-3.22.1/Modules/FindCUDA/run_nvcc.cmake
             
