@@ -41,19 +41,18 @@ jobs:
     - name: build-ccache
       working-directory: ./thirdparty/ccache-4.5.1/.build
       run:  >
-            export PATH="/usr/lib/ccache:/usr/local/opt/ccache/libexec:$PATH"
-            && cmake ../
+            cmake ../
             -DCMAKE_CUDA_COMPILER_LAUNCHER=ccache
-            -DWITH_CUDA=ON
             -DZSTD_FROM_INTERNET=ON
             -DHIREDIS_FROM_INTERNET=ON
             -DCMAKE_BUILD_TYPE=Release
             -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/thirdparty/ccache-4.5.1/.install
             && make install -j2
-            && ls -l ${{github.workspace}}/thirdparty/ccache-4.5.1/.install/bin
             
     - name: cmake-cat
-      run: cat /usr/share/cmake-3.22.1/Modules/FindCUDA/run_nvcc.cmake
+      run: |
+            ls -l /usr/share/cmake*
+            cat /usr/share/cmake-3.22.1/Modules/FindCUDA/run_nvcc.cmake
             
     - name: cuda-toolkit 
       uses: Jimver/cuda-toolkit@v0.2.5
