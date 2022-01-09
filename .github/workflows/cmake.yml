@@ -42,7 +42,7 @@ jobs:
       working-directory: ./thirdparty/ccache-4.5.1/.build
       run:  >
             export PATH="/usr/lib/ccache:/usr/local/opt/ccache/libexec:$PATH"
-            cmake ../
+            && cmake ../
             -DCMAKE_CUDA_COMPILER_LAUNCHER=ccache
             -DWITH_CUDA=ON
             -DZSTD_FROM_INTERNET=ON
