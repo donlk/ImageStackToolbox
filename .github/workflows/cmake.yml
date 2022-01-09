@@ -56,6 +56,10 @@ jobs:
     - name: cmake-cat
       run: |
             ls -l /usr/share/cmake*
+            echo "Finding cmake under /usr"
+            find /usr -iname "*cmake*"
+            echo "Finding cmake under /local"
+            find /local -iname "*cmake*"
             cat /usr/share/cmake-3.22.1/Modules/FindCUDA/run_nvcc.cmake
             
     - name: Install cuda-toolkit 
