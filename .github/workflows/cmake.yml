@@ -22,6 +22,9 @@ jobs:
       with:
             submodules: 'recursive'
             
+    - name: ccache
+      uses: hendrikmuhs/ccache-action@v1
+            
     - name: pull-ccache
       run:  |
             mkdir -p thirdparty/ccache
@@ -38,7 +41,9 @@ jobs:
     - name: build-ccache
       working-directory: ./thirdparty/ccache-4.5.1/.build
       run:  >
+            export PATH="/usr/lib/ccache:/usr/local/opt/ccache/libexec:$PATH" 
             cmake ../
+            -DCMAKE_CUDA_COMPILER_LAUNCHER=ccache
             -DWITH_CUDA=ON
             -DZSTD_FROM_INTERNET=ON
             -DHIREDIS_FROM_INTERNET=ON
@@ -52,9 +57,6 @@ jobs:
             
     - name: cuda-toolkit 
       uses: Jimver/cuda-toolkit@v0.2.5
-    
-    # - name: ccache
-    # uses: hendrikmuhs/ccache-action@v1
       
     - name: cmake-version
       run: cmake --version
