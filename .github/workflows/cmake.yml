@@ -50,9 +50,10 @@ jobs:
             -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/thirdparty/ccache-4.5.1/.install
             && make install -j2
             
-    - name: cmake-cat
+    - name: Added ccache support for NVCC compiler invocation
       run: |
-            cat /usr/local/share/cmake-3.22/Modules/FindCUDA/run_nvcc.cmake
+            sed '/^set(CUDA_NVCC_EXECUTABLE.*/i set(CMAKE_CUDA_COMPILER_LAUNCHER "@CMAKE_CUDA_COMPILER_LAUNCHER@") # path' /usr/local/share/cmake-3.22/Modules/FindCUDA/run_nvcc.cmake
+            sed ':a;N;$!ba;s/-M\n  ${CUDACC_DEFINE}/-dc -x cu\n  ${CUDACC_DEFINE}/g' /usr/local/share/cmake-3.22/Modules/FindCUDA/run_nvcc.cmake
             
     - name: Install cuda-toolkit 
       uses: Jimver/cuda-toolkit@v0.2.5
@@ -86,7 +87,9 @@ jobs:
             export PATH="/usr/lib/ccache:/usr/local/opt/ccache/libexec:$PATH"
             && cmake ../
             -DWITH_CUDA=ON
-            -DCMAKE_CUDA_COMPILER_LAUNCHER=ccache
+            -DCMAKE_C_COMPILER_LAUNCHER=${{github.workspace}}/thirdparty/ccache-4.5.1/.install/bin/ccache
+            -DCMAKE_CXX_COMPILER_LAUNCHER=${{github.workspace}}/thirdparty/ccache-4.5.1/.install/bin/ccache
+            -DCMAKE_CUDA_COMPILER_LAUNCHER=${{github.workspace}}/thirdparty/ccache-4.5.1/.install/bin/ccache
             -DOPENCV_EXTRA_MODULES_PATH=${{github.workspace}}/thirdparty/opencv_contrib-4.5.5/modules
             -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/thirdparty/opencv-4.5.5/.install
             -DBUILD_LIST="core,imgproc,calib3d,highgui,features2d,flann,cudev,cudafeatures2d"
@@ -101,7 +104,9 @@ jobs:
            -B ${{github.workspace}}/build
            -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
            -DBUILD_SHARED_LIBS=OFF
-           -DCMAKE_CUDA_COMPILER_LAUNCHER=ccache
+           -DCMAKE_C_COMPILER_LAUNCHER=${{github.workspace}}/thirdparty/ccache-4.5.1/.install/bin/ccache
+           -DCMAKE_CXX_COMPILER_LAUNCHER=${{github.workspace}}/thirdparty/ccache-4.5.1/.install/bin/ccache
+           -DCMAKE_CUDA_COMPILER_LAUNCHER=${{github.workspace}}/thirdparty/ccache-4.5.1/.install/bin/ccache
            -DOpenCV_DIR=${{github.workspace}}/thirdparty/opencv-4.5.5/.install/lib/cmake/opencv4
 
     - name: Build
