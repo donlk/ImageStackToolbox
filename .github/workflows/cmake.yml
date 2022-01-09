@@ -24,9 +24,6 @@ jobs:
             
     - name: Install ccache
       uses: hendrikmuhs/ccache-action@v1
-      
-    - name: Install cmake
-      uses: lukka/get-cmake@v3.21.2
             
     - name: Pull ccache
       run:  |
@@ -55,12 +52,7 @@ jobs:
             
     - name: cmake-cat
       run: |
-            ls -l /usr/share/cmake*
-            echo "Finding cmake under /usr"
-            find /usr -iname "*cmake*"
-            echo "Finding cmake under /local"
-            find /local -iname "*cmake*"
-            cat /usr/share/cmake-3.22.1/Modules/FindCUDA/run_nvcc.cmake
+            cat /usr/local/share/cmake-3.22/Modules/FindCUDA/run_nvcc.cmake
             
     - name: Install cuda-toolkit 
       uses: Jimver/cuda-toolkit@v0.2.5
