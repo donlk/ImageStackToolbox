@@ -29,7 +29,7 @@ jobs:
     
     - name: extract-ccache
       working-directory: ./thirdparty
-      run:  tar -xf ccache.tar.bz2
+      run:  tar -xf ccache.tar.gz
       
     - name: create-ccache-build-folder
       working-directory: ./thirdparty
@@ -68,8 +68,8 @@ jobs:
     - name: extract-opencv
       working-directory: ./thirdparty
       run:  |
-            tar -xf opencv.tar.bz2
-            tar -xf opencv_contrib.tar.bz2
+            tar -xf opencv.tar.gz
+            tar -xf opencv_contrib.tar.gz
             ls -l
             
     - name: create-opencv-build-folder
