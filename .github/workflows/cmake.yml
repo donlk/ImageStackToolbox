@@ -81,6 +81,10 @@ jobs:
     - name: Create opencv build folder
       working-directory: ./thirdparty
       run: mkdir -p ./opencv-4.5.5/.build
+      
+    - name: Remove ccache-violating nvcc flags from OpenCV
+      working-directory: ./thirdparty/opencv-4.5.5
+      run: sed -i 's/set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS} -Xcompiler -DCVAPI_EXPORTS)//g' cmake/OpenCVDetectCUDA.cmake
             
     - name: Build opencv
       working-directory: ./thirdparty/opencv-4.5.5/.build
