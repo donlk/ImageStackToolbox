@@ -9,6 +9,7 @@ on:
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Release
+  OPENCV_VERSION: 4.5.0
 
 jobs:   
   build:
@@ -68,8 +69,8 @@ jobs:
     - name: Pull opencv
       run:  |
             mkdir -p thirdparty/opencv
-            wget https://github.com/opencv/opencv/archive/refs/tags/4.5.5.tar.gz -q -O thirdparty/opencv.tar.gz
-            wget https://github.com/opencv/opencv_contrib/archive/refs/tags/4.5.5.tar.gz -q -O thirdparty/opencv_contrib.tar.gz
+            wget https://github.com/opencv/opencv/archive/refs/tags/${{env.OPENCV_VERSION}}.tar.gz -q -O thirdparty/opencv.tar.gz
+            wget https://github.com/opencv/opencv_contrib/archive/refs/tags/${{env.OPENCV_VERSION}}.tar.gz -q -O thirdparty/opencv_contrib.tar.gz
             
     - name: Extract opencv
       working-directory: ./thirdparty
@@ -80,25 +81,26 @@ jobs:
             
     - name: Create opencv build folder
       working-directory: ./thirdparty
-      run: mkdir -p ./opencv-4.5.5/.build
+      run: mkdir -p ./opencv-4.5.0/.build
       
     - name: Remove ccache-violating nvcc flags from OpenCV
-      working-directory: ./thirdparty/opencv-4.5.5
+      working-directory: ./thirdparty/opencv-${{env.OPENCV_VERSION}}
       run: |
             ls -l
             sed -i 's/set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS} -Xcompiler -DCVAPI_EXPORTS)//g' cmake/OpenCVDetectCUDA.cmake
             cat cmake/OpenCVDetectCUDA.cmake
             
     - name: Build opencv
-      working-directory: ./thirdparty/opencv-4.5.5/.build
+      working-directory: ./thirdparty/opencv-${{env.OPENCV_VERSION}}/.build
       run:  >
             cmake ../
             -DWITH_CUDA=ON
+            -DBUILD_SHARED_LIBS=NO
             -DCMAKE_C_COMPILER_LAUNCHER=${{github.workspace}}/thirdparty/ccache-4.5.1/.install/bin/ccache
             -DCMAKE_CXX_COMPILER_LAUNCHER=${{github.workspace}}/thirdparty/ccache-4.5.1/.install/bin/ccache
             -DCMAKE_CUDA_COMPILER_LAUNCHER=${{github.workspace}}/thirdparty/ccache-4.5.1/.install/bin/ccache
             -DOPENCV_EXTRA_MODULES_PATH=${{github.workspace}}/thirdparty/opencv_contrib-4.5.5/modules
-            -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/thirdparty/opencv-4.5.5/.install
+            -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/thirdparty/opencv-${{env.OPENCV_VERSION}}/.install
             -DBUILD_LIST="core,imgproc,calib3d,highgui,features2d,flann,cudev,cudafeatures2d"
             && make install -j2
 
@@ -113,7 +115,7 @@ jobs:
            -DCMAKE_C_COMPILER_LAUNCHER=${{github.workspace}}/thirdparty/ccache-4.5.1/.install/bin/ccache
            -DCMAKE_CXX_COMPILER_LAUNCHER=${{github.workspace}}/thirdparty/ccache-4.5.1/.install/bin/ccache
            -DCMAKE_CUDA_COMPILER_LAUNCHER=${{github.workspace}}/thirdparty/ccache-4.5.1/.install/bin/ccache
-           -DOpenCV_DIR=${{github.workspace}}/thirdparty/opencv-4.5.5/.install/lib/cmake/opencv4
+           -DOpenCV_DIR=${{github.workspace}}/thirdparty/opencv-${{env.OPENCV_VERSION}}/.install/lib/cmake/opencv4
 
     - name: Build
       # Build your program with the given configuration
