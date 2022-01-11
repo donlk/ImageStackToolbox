@@ -22,6 +22,12 @@ jobs:
     - uses: actions/checkout@v2
       with:
             submodules: 'recursive'
+    
+    - name: CMake debug info
+      run: |
+            cmake --version
+            which cmake
+            sudo find /usr -iname run_nvcc.cmake
             
     - name: Install ccache
       uses: hendrikmuhs/ccache-action@v1
