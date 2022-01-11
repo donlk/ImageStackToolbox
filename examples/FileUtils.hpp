@@ -4,8 +4,15 @@
 #include <vector>
 #include <string>
 #include <iostream>
-#include <filesystem>
 #include <algorithm>
+
+#if defined(CXX17_FILESYSTEM) || defined (CXX17_FILESYSTEM_LIBFS)
+	#include <filesystem>
+	namespace fs = std::filesystem;
+#elif defined(CXX11_EXP_FILESYSTEM) || defined (CXX11_EXP_FILESYSTEM_LIBFS)
+	#include <experimental/filesystem>
+	namespace fs = std::experimental::filesystem;
+#endif
 
 namespace fs = std::filesystem;
 
