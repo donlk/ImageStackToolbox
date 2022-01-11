@@ -55,7 +55,6 @@ jobs:
     - name: Increase ccache size
       run: |
             ${{github.workspace}}/thirdparty/ccache-4.5.1/.install/bin/ccache -M 2G
-            ${{github.workspace}}/thirdparty/ccache-4.5.1/.install/bin/ccache -cC
             ${{github.workspace}}/thirdparty/ccache-4.5.1/.install/bin/ccache -s
             
     - name: Added ccache support for NVCC compiler invocation
