@@ -64,6 +64,8 @@ jobs:
             
     - name: Install cuda-toolkit 
       uses: Jimver/cuda-toolkit@v0.2.5
+      with:
+            cuda: '10.2.89'
       
     - name: cmake-version
       run: cmake --version
