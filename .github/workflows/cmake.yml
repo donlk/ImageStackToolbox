@@ -86,7 +86,6 @@ jobs:
     - name: Remove ccache-violating nvcc flags from OpenCV
       working-directory: ./thirdparty/opencv-${{env.OPENCV_VERSION}}
       run: |
-            ls -l
             sed -i 's/set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS} -Xcompiler -DCVAPI_EXPORTS)//g' cmake/OpenCVDetectCUDA.cmake
             cat cmake/OpenCVDetectCUDA.cmake
             
@@ -99,7 +98,7 @@ jobs:
             -DCMAKE_C_COMPILER_LAUNCHER=${{github.workspace}}/thirdparty/ccache-4.5.1/.install/bin/ccache
             -DCMAKE_CXX_COMPILER_LAUNCHER=${{github.workspace}}/thirdparty/ccache-4.5.1/.install/bin/ccache
             -DCMAKE_CUDA_COMPILER_LAUNCHER=${{github.workspace}}/thirdparty/ccache-4.5.1/.install/bin/ccache
-            -DOPENCV_EXTRA_MODULES_PATH=${{github.workspace}}/thirdparty/opencv_contrib-4.5.5/modules
+            -DOPENCV_EXTRA_MODULES_PATH=${{github.workspace}}/thirdparty/opencv_contrib-${{env.OPENCV_VERSION}}/modules
             -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/thirdparty/opencv-${{env.OPENCV_VERSION}}/.install
             -DBUILD_LIST="core,imgproc,calib3d,highgui,features2d,flann,cudev,cudafeatures2d"
             && make install -j2
