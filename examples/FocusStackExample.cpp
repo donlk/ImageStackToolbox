@@ -20,13 +20,19 @@
 #include <vector>
 #include <iostream>
 #include <memory>
-#include <filesystem>
+
+#if defined(CXX17_FILESYSTEM) || defined (CXX17_FILESYSTEM_LIBFS)
+	#include <filesystem>
+	namespace fs = std::filesystem;
+#elif defined(CXX11_EXP_FILESYSTEM) || defined (CXX11_EXP_FILESYSTEM_LIBFS)
+	#include <experimental/filesystem>
+	namespace fs = std::experimental::filesystem;
+#endif
 
 #include "../inc/imagestack/FocusImageStacker.h"
 #include "../inc/imagestack/MeanImageStacker.h"
 
 using namespace std;
-namespace fs = std::filesystem;
 
 const int OUT_FILENAME_PADDING = 8;
 
