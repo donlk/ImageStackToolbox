@@ -29,6 +29,15 @@ jobs:
             
     - name: Install ccache
       uses: hendrikmuhs/ccache-action@v1
+      
+    - name: Set ccache build folder
+      run: ccache -d /home/runner/.ccache
+      
+    - name: Cache ccache directory
+      uses: actions/cache@v2
+      with:
+            path: /home/runner/.ccache
+            key: ${{ runner.os }}-mycache-v1-${{ hashFiles(...) }}
             
     - name: Pull ccache
       run:  |
@@ -55,6 +64,9 @@ jobs:
             -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/thirdparty/ccache-4.5.1/.install
             && make install -j2
             
+    - name: Set custom ccache build folder
+      run: ${{github.workspace}}/thirdparty/ccache-4.5.1/.install/bin/ccache -d /home/runner/.ccache
+      
     - name: Increase ccache size
       run: |
             ${{github.workspace}}/thirdparty/ccache-4.5.1/.install/bin/ccache -M 2G
