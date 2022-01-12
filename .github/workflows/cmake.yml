@@ -31,8 +31,10 @@ jobs:
       uses: hendrikmuhs/ccache-action@v1
       
     - name: Install GTest
-      run: sudo apt-get install libgtest-dev
-            
+      run: |
+             sudo apt-get install libgtest-dev
+             cd /usr/src/gtest && sudo cmake CMakeLists.txt && sudo make -j2 && sudo cp *.a /usr/lib && sudo ln -s /usr/lib/libgtest.a /usr/local/lib/libgtest.a && sudo ln -s /usr/lib/libgtest_main.a /usr/local/lib/libgtest_main.a
+             
 #    - name: Added ccache support for NVCC compiler invocation
 #      run: |
 #            sudo sed -i '/^set(CUDA_NVCC_EXECUTABLE.*/i set(CMAKE_CUDA_COMPILER_LAUNCHER "@CMAKE_CUDA_COMPILER_LAUNCHER@") # path' /usr/local/share/cmake-3.22/Modules/FindCUDA/run_nvcc.cmake
