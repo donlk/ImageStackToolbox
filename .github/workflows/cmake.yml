@@ -10,6 +10,7 @@ env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Release
   OPENCV_VERSION: 4.5.0
+  CCACHE_DIR: /home/runner/.ccache
 
 jobs:   
   build:
@@ -22,19 +23,28 @@ jobs:
     - uses: actions/checkout@v2
       with:
             submodules: 'recursive'
+          
+    - name: Cache ccache directory
+      uses: actions/cache@v2
+      with:
+            path: /home/runner/.ccache
+            key: ${{ runner.os }}-myccache-v1
     
     - name: CMake debug info
       run: |
             cmake --version
             
     - name: Install ccache
-      uses: hendrikmuhs/ccache-action@v1
-      with:
-             key: ccache-v2
-             max-size: 500M
+      run: |
+             sudo apt-get install -y ccache
+             ccache --set-config=cache_dir=/home/runner/.ccache
+             ccache --set-config=max_size=500M
+             ccache -z
              
-    - name: Ccache debug info
-      run: find /home/runner/work/ImageStackToolbox/ImageStackToolbox/.ccache
+#      uses: hendrikmuhs/ccache-action@v1
+#      with:
+#             key: ccache-v2
+#             max-size: 500M
       
     - name: Install GTest
       run: |
@@ -43,10 +53,6 @@ jobs:
              
     - name: Added ccache support for NVCC compiler invocation
       run: |
-            sudo sed -i '250 i \\nexecute_process(COMMAND echo "Before cuda compile.")' /usr/local/share/cmake-3.22/Modules/FindCUDA/run_nvcc.cmake
-            sudo sed -i '252 i execute_process(COMMAND ${CMAKE_CUDA_COMPILER_LAUNCHER} -s)' /usr/local/share/cmake-3.22/Modules/FindCUDA/run_nvcc.cmake
-            sudo sed -i '268 i \\nexecute_process(COMMAND echo "After cuda compile.")' /usr/local/share/cmake-3.22/Modules/FindCUDA/run_nvcc.cmake
-            sudo sed -i '270 i execute_process(COMMAND  ${CMAKE_CUDA_COMPILER_LAUNCHER} -s)' /usr/local/share/cmake-3.22/Modules/FindCUDA/run_nvcc.cmake
             sudo sed -i '/^set(CUDA_NVCC_EXECUTABLE.*/i set(CMAKE_CUDA_COMPILER_LAUNCHER "@CMAKE_CUDA_COMPILER_LAUNCHER@") # path' /usr/local/share/cmake-3.22/Modules/FindCUDA/run_nvcc.cmake
             sudo sed -i ':a;N;$!ba;s/COMMAND "${CUDA_NVCC_EXECUTABLE}"\n  "${source_file}"/COMMAND ${CMAKE_CUDA_COMPILER_LAUNCHER}\n  "${CUDA_NVCC_EXECUTABLE}"\n  "${source_file}"/g' /usr/local/share/cmake-3.22/Modules/FindCUDA/run_nvcc.cmake
             cat /usr/local/share/cmake-3.22/Modules/FindCUDA/run_nvcc.cmake
@@ -108,16 +114,10 @@ jobs:
            -DCMAKE_CUDA_COMPILER_LAUNCHER=ccache
            -DOpenCV_DIR=${{github.workspace}}/thirdparty/opencv-${{env.OPENCV_VERSION}}/.install/lib/cmake/opencv4
            -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/install
-           
 
     - name: Build
       # Build your program with the given configuration
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
-      
-    - name: Cache debug
-      run: |
-            echo "Ccache files:"
-            find /home/runner/work/ImageStackToolbox/ImageStackToolbox/.ccache
 
     - name: Test
       working-directory: ${{github.workspace}}/build
