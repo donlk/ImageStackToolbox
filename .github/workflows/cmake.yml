@@ -29,6 +29,9 @@ jobs:
             
     - name: Install ccache
       uses: hendrikmuhs/ccache-action@v1
+      with:
+             key: ccache-v2
+             max-size: 500M
       
     - name: Install GTest
       run: |
@@ -44,6 +47,8 @@ jobs:
             sudo sed -i '/^set(CUDA_NVCC_EXECUTABLE.*/i set(CMAKE_CUDA_COMPILER_LAUNCHER "@CMAKE_CUDA_COMPILER_LAUNCHER@") # path' /usr/local/share/cmake-3.22/Modules/FindCUDA/run_nvcc.cmake
             sudo sed -i ':a;N;$!ba;s/COMMAND "${CUDA_NVCC_EXECUTABLE}"\n  "${source_file}"/COMMAND ${CMAKE_CUDA_COMPILER_LAUNCHER}\n  "${CUDA_NVCC_EXECUTABLE}"\n  "${source_file}"/g' /usr/local/share/cmake-3.22/Modules/FindCUDA/run_nvcc.cmake
             cat /usr/local/share/cmake-3.22/Modules/FindCUDA/run_nvcc.cmake
+            echo "Ccache conf file:"
+            cat /home/runner/.ccache/ccache.conf
             
     - name: Install cuda-toolkit 
       uses: Jimver/cuda-toolkit@v0.2.5
@@ -105,6 +110,11 @@ jobs:
     - name: Build
       # Build your program with the given configuration
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+      
+    - name: Cache debug
+      run: |
+            echo "Ccache files:"
+            find /home/runner/.ccache
 
     - name: Test
       working-directory: ${{github.workspace}}/build
