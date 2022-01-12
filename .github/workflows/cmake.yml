@@ -64,7 +64,7 @@ jobs:
             echo "System ccache stats:"
             ccache -s
             echo "Custom ccache stats:"
-            ${{github.workspace}}/thirdparty/ccache-4.5.1/.install/bin/ccache -s
+            ${{github.workspace}}/thirdparty/ccache-4.5.1/.install/bin/ccache -sv
             
     - name: Added ccache support for NVCC compiler invocation
       run: |
