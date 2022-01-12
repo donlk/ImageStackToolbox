@@ -10,6 +10,7 @@ env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Release
   OPENCV_VERSION: 4.5.0
+  CCACHE_CONFIGPATH: /home/runner/.ccache
 
 jobs:   
   build:
@@ -29,9 +30,6 @@ jobs:
             
     - name: Install ccache
       uses: hendrikmuhs/ccache-action@v1
-      
-    - name: Set ccache build folder
-      run: ccache -d /home/runner/.ccache
       
     - name: Cache ccache directory
       uses: actions/cache@v2
@@ -64,9 +62,6 @@ jobs:
             -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/thirdparty/ccache-4.5.1/.install
             && make install -j2
             
-    - name: Set custom ccache build folder
-      run: ${{github.workspace}}/thirdparty/ccache-4.5.1/.install/bin/ccache -d /home/runner/.ccache
-      
     - name: Increase ccache size
       run: |
             ${{github.workspace}}/thirdparty/ccache-4.5.1/.install/bin/ccache -M 2G
