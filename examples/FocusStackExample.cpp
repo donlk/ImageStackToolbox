@@ -4,14 +4,15 @@
 #include "../inc/imagealign/ImageAligner.h"
 #include "../inc/imagealign/CPUImageAligner.h"
 #include "../inc/imagealign/GPUImageAligner.h"
+#include "../inc/imagestack/FocusImageStacker.h"
+#include "../inc/imagestack/MeanImageStacker.h"
 #include "../inc/detectorextractor/OpenCVAKAZEDetectorExtractor.h"
 #include "../inc/detectorextractor/CudaAKAZEDetectorExtractor.h"
+#include "../inc/detectorextractor/OpenCVSIFTDetectorExtractor.h"
 #include "../inc/matcher/OpenCVBFMatcher.h"
 #include "../inc/matcher/OpenCVFlannMatcher.h"
 #include "../inc/util/Utils.h"
 #include "../inc/util/Timer.h"
-
-#include "../inc/detectorextractor/OpenCVSIFTDetectorExtractor.h"
 
 #include <opencv2/opencv.hpp>
 #include <opencv2/imgcodecs/imgcodecs.hpp>
@@ -19,18 +20,14 @@
 #include <string>
 #include <vector>
 #include <iostream>
-#include <memory>
 
-#if defined(CXX17_FILESYSTEM) || defined (CXX17_FILESYSTEM_LIBFS)
+#if(defined(_MSC_VER) or (defined(__GNUC__) and (7 <= __GNUC_MAJOR__)))
 	#include <filesystem>
-	namespace fs = std::filesystem;
-#elif defined(CXX11_EXP_FILESYSTEM) || defined (CXX11_EXP_FILESYSTEM_LIBFS)
+	namespace fs = ::std::filesystem;
+#else
 	#include <experimental/filesystem>
-	namespace fs = std::experimental::filesystem;
+	namespace fs = ::std::experimental::filesystem;
 #endif
-
-#include "../inc/imagestack/FocusImageStacker.h"
-#include "../inc/imagestack/MeanImageStacker.h"
 
 using namespace std;
 

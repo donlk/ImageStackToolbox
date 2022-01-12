@@ -6,15 +6,13 @@
 #include <iostream>
 #include <algorithm>
 
-#if defined(CXX17_FILESYSTEM) || defined (CXX17_FILESYSTEM_LIBFS)
+#if(defined(_MSC_VER) or (defined(__GNUC__) and (7 <= __GNUC_MAJOR__)))
 	#include <filesystem>
-	namespace fs = std::filesystem;
-#elif defined(CXX11_EXP_FILESYSTEM) || defined (CXX11_EXP_FILESYSTEM_LIBFS)
+	namespace fs = ::std::filesystem;
+#else
 	#include <experimental/filesystem>
-	namespace fs = std::experimental::filesystem;
+	namespace fs = ::std::experimental::filesystem;
 #endif
-
-namespace fs = std::filesystem;
 
 std::string supportedImgFormats[] = {".png", ".jpg", ".jpeg"};
 
