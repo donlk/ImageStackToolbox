@@ -37,7 +37,7 @@ jobs:
       uses: actions/cache@v2
       with:
             path: /home/runner/.ccache
-            key: ${{ runner.os }}-mycache-v1-${{ hashFiles(...) }}
+            key: ${{ runner.os }}-mycache-v1-${{ hashFiles('**/lockfiles') }}
             
     - name: Pull ccache
       run:  |
