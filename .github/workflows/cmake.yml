@@ -32,6 +32,9 @@ jobs:
       with:
              key: ccache-v2
              max-size: 500M
+             
+    - name: Ccache debug info
+      run: find /home/runner/work/ImageStackToolbox/ImageStackToolbox/.ccache
       
     - name: Install GTest
       run: |
