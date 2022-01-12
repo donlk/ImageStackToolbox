@@ -29,25 +29,20 @@ jobs:
             
     - name: Install ccache
       uses: hendrikmuhs/ccache-action@v1
+      
+    - name: Install GTest
+      run: sudo apt-get install libgtest-dev
             
-    - name: Ccache debug
-      run: |
-            echo "System ccache stats:"
-            ccache -s
-            
-    - name: Added ccache support for NVCC compiler invocation
-      run: |
-            sudo sed -i '/^set(CUDA_NVCC_EXECUTABLE.*/i set(CMAKE_CUDA_COMPILER_LAUNCHER "@CMAKE_CUDA_COMPILER_LAUNCHER@") # path' /usr/local/share/cmake-3.22/Modules/FindCUDA/run_nvcc.cmake
-            sudo sed -i ':a;N;$!ba;s/COMMAND "${CUDA_NVCC_EXECUTABLE}"\n  "${source_file}"/COMMAND ${CMAKE_CUDA_COMPILER_LAUNCHER}\n  "${CUDA_NVCC_EXECUTABLE}"\n  "${source_file}"/g' /usr/local/share/cmake-3.22/Modules/FindCUDA/run_nvcc.cmake
-            cat /usr/local/share/cmake-3.22/Modules/FindCUDA/run_nvcc.cmake
+#    - name: Added ccache support for NVCC compiler invocation
+#      run: |
+#            sudo sed -i '/^set(CUDA_NVCC_EXECUTABLE.*/i set(CMAKE_CUDA_COMPILER_LAUNCHER "@CMAKE_CUDA_COMPILER_LAUNCHER@") # path' /usr/local/share/cmake-3.22/Modules/FindCUDA/run_nvcc.cmake
+#            sudo sed -i ':a;N;$!ba;s/COMMAND "${CUDA_NVCC_EXECUTABLE}"\n  "${source_file}"/COMMAND ${CMAKE_CUDA_COMPILER_LAUNCHER}\n  "${CUDA_NVCC_EXECUTABLE}"\n  "${source_file}"/g' /usr/local/share/cmake-3.22/Modules/FindCUDA/run_nvcc.cmake
+#            cat /usr/local/share/cmake-3.22/Modules/FindCUDA/run_nvcc.cmake
             
     - name: Install cuda-toolkit 
       uses: Jimver/cuda-toolkit@v0.2.5
       with:
             cuda: '10.2.89'
-      
-    - name: ccache-version
-      run: ccache --version
       
     - name: Pull opencv
       run:  |
@@ -98,6 +93,8 @@ jobs:
            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
            -DCMAKE_CUDA_COMPILER_LAUNCHER=ccache
            -DOpenCV_DIR=${{github.workspace}}/thirdparty/opencv-${{env.OPENCV_VERSION}}/.install/lib/cmake/opencv4
+           -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/install
+           
 
     - name: Build
       # Build your program with the given configuration
