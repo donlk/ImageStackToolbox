@@ -8,6 +8,7 @@ PROJECT(ImageStackToolbox)
 OPTION(USE_CUDA "Use CUDA only features" ON)
 OPTION(BUILD_NONFREE "Build non-free modules" ON)
 OPTION(BUILD_EXAMPLES "Build example executables" ON)
+OPTION(BUILD_TESTS "Build tests" ON)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -23,6 +24,11 @@ file(GLOB
     headers
     "inc/*.h"
     "inc/*.hpp"
+)
+
+file(GLOB_RECURSE
+    test_sources
+    "test/*.cpp"
 )
 
 # ===================================================================
@@ -85,11 +91,13 @@ target_link_libraries(
 )
 install(TARGETS ist DESTINATION lib)
 
-#add_dependencies(ist OpenCV)
-#add_dependencies(ist Fast-AKAZE)
-#if(USE_CUDA)
-#    add_dependencies(ist CUDA-AKAZE)
-#endif(USE_CUDA)
+# ===================================================================
+# Test building
+# ===================================================================
+if(BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(test)
+endif()
 
 # ===================================================================
 # Examples
