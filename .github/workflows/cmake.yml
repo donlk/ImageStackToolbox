@@ -114,7 +114,7 @@ jobs:
     - name: Cache debug
       run: |
             echo "Ccache files:"
-            find /home/runner/.ccache
+            find /home/runner/work/ImageStackToolbox/ImageStackToolbox/.ccache
 
     - name: Test
       working-directory: ${{github.workspace}}/build
