@@ -28,7 +28,7 @@ jobs:
       uses: actions/cache@v2
       with:
             path: /home/runner/.ccache
-            key: ${{ runner.os }}-myccache-v2
+            key: ${{ runner.os }}-myccache-v3
     
     - name: CMake debug info
       run: |
@@ -38,7 +38,7 @@ jobs:
       run: |
              sudo apt-get install -y ccache
              ccache --set-config=cache_dir=/home/runner/.ccache
-             ccache --set-config=max_size=500M
+             ccache --set-config=max_size=1G
              ccache -z
              
 #      uses: hendrikmuhs/ccache-action@v1
