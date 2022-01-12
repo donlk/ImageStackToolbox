@@ -84,9 +84,6 @@ jobs:
       with:
             cuda: '10.2.89'
       
-    - name: cmake-version
-      run: cmake --version
-      
     - name: ccache-version
       run: ccache --version
       
