@@ -119,7 +119,7 @@ jobs:
             -DCMAKE_CUDA_COMPILER_LAUNCHER=${{github.workspace}}/thirdparty/ccache-4.5.1/.install/bin/ccache
             -DOPENCV_EXTRA_MODULES_PATH=${{github.workspace}}/thirdparty/opencv_contrib-${{env.OPENCV_VERSION}}/modules
             -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/thirdparty/opencv-${{env.OPENCV_VERSION}}/.install
-            -DBUILD_LIST="core,imgproc,calib3d,highgui,features2d,flann,cudev,cudafeatures2d"
+            -DBUILD_LIST="core,imgproc,calib3d,highgui,features2d,flann,video,photo,cudev,cudafeatures2d"
             && make install -j2
 
     - name: Configure CMake
