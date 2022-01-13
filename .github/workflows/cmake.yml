@@ -69,7 +69,8 @@ jobs:
       run: |
              sudo apt-get install libgtest-dev
              cd /usr/src/gtest && sudo cmake CMakeLists.txt && sudo make -j2 && sudo cp *.a /usr/lib && sudo ln -s /usr/lib/libgtest.a /usr/local/lib/libgtest.a && sudo ln -s /usr/lib/libgtest_main.a /usr/local/lib/libgtest_main.a
-             
+            
+    # Since cmake does not support a compiler launcher for nvcc natevly, we have to add it into it's configuration file.
     - name: Added ccache support for NVCC compiler invocation
       run: |
             sudo sed -i '250 i \\nexecute_process(COMMAND echo "Before cuda compile.")' /usr/local/share/cmake-3.22/Modules/FindCUDA/run_nvcc.cmake
