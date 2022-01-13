@@ -39,6 +39,10 @@ jobs:
             mkdir -p thirdparty/ccache
             wget https://github.com/ccache/ccache/releases/download/v4.5.1/ccache-4.5.1.tar.gz -q -O thirdparty/ccache.tar.gz
             
+    - name: Extract ccache
+      working-directory: ./thirdparty
+      run:  tar -xf ccache.tar.gz
+      
     - name: Create ccache build folder
       working-directory: ./thirdparty
       run: mkdir -p ./ccache-4.5.1/.build
