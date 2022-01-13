@@ -148,5 +148,4 @@ jobs:
       
     - name: Cache debug
       run: |
-            echo "manifest.txt:"
-            cat manifest.txt
+            find /home/runner -iname manifest.txt
