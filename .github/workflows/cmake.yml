@@ -55,7 +55,7 @@ jobs:
             -DZSTD_FROM_INTERNET=ON
             -DHIREDIS_FROM_INTERNET=ON
             -DCMAKE_BUILD_TYPE=Release
-            -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/thirdparty/${{env.CCACHE_VERSION}}/.install
+            -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/thirdparty/ccache-${{env.CCACHE_VERSION}}/.install
             && make install -j2
             
     - name: Set ccache options
