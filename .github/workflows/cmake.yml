@@ -28,23 +28,42 @@ jobs:
       uses: actions/cache@v2
       with:
             path: /home/runner/.ccache
-            key: ${{ runner.os }}-myccache-v2
+            key: ${{ runner.os }}-myccache-v3
     
     - name: CMake debug info
       run: |
             cmake --version
             
-    - name: Install ccache
+    - name: Pull ccache
+      run:  |
+            mkdir -p thirdparty/ccache
+            wget https://github.com/ccache/ccache/releases/download/v4.5.1/ccache-4.5.1.tar.gz -q -O thirdparty/ccache.tar.gz
+            
+    - name: Extract ccache
+      working-directory: ./thirdparty
+      run:  tar -xf ccache.tar.gz
+      
+    - name: Create ccache build folder
+      working-directory: ./thirdparty
+      run: mkdir -p ./ccache-4.5.1/.build
+      
+    - name: Build ccache
+      working-directory: ./thirdparty/ccache-4.5.1/.build
+      run:  >
+            cmake ../
+            -DZSTD_FROM_INTERNET=ON
+            -DHIREDIS_FROM_INTERNET=ON
+            -DCMAKE_BUILD_TYPE=Release
+            -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/thirdparty/ccache-4.5.1/.install
+            && make install -j2
+            
+    - name: Set ccache options
       run: |
-             sudo apt-get install -y ccache
-             ccache --set-config=cache_dir=/home/runner/.ccache
-             ccache --set-config=max_size=500M
-             ccache -z
-             
-#      uses: hendrikmuhs/ccache-action@v1
-#      with:
-#             key: ccache-v2
-#             max-size: 500M
+             ${{github.workspace}}/thirdparty/ccache-4.5.1/.install/bin/ccache --set-config=cache_dir=/home/runner/.ccache
+             ${{github.workspace}}/thirdparty/ccache-4.5.1/.install/bin/ccache --set-config=max_size=1G
+             ${{github.workspace}}/thirdparty/ccache-4.5.1/.install/bin/ccache --set-config=compression_level=5
+             ${{github.workspace}}/thirdparty/ccache-4.5.1/.install/bin/ccache -z
+             ${{github.workspace}}/thirdparty/ccache-4.5.1/.install/bin/ccache -x
       
     - name: Install GTest
       run: |
@@ -60,8 +79,6 @@ jobs:
             sudo sed -i '/^set(CUDA_NVCC_EXECUTABLE.*/i set(CMAKE_CUDA_COMPILER_LAUNCHER "@CMAKE_CUDA_COMPILER_LAUNCHER@") # path' /usr/local/share/cmake-3.22/Modules/FindCUDA/run_nvcc.cmake
             sudo sed -i ':a;N;$!ba;s/COMMAND "${CUDA_NVCC_EXECUTABLE}"\n  "${source_file}"/COMMAND ${CMAKE_CUDA_COMPILER_LAUNCHER}\n  "${CUDA_NVCC_EXECUTABLE}"\n  "${source_file}"/g' /usr/local/share/cmake-3.22/Modules/FindCUDA/run_nvcc.cmake
             cat /usr/local/share/cmake-3.22/Modules/FindCUDA/run_nvcc.cmake
-            echo "Ccache conf file:"
-            cat /home/runner/.ccache/ccache.conf
             
     - name: Install cuda-toolkit 
       uses: Jimver/cuda-toolkit@v0.2.5
@@ -97,13 +114,13 @@ jobs:
             cmake ../
             -DWITH_CUDA=ON
             -DBUILD_SHARED_LIBS=NO
-            -DCMAKE_C_COMPILER_LAUNCHER=ccache
-            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
-            -DCMAKE_CUDA_COMPILER_LAUNCHER=ccache
+            -DCMAKE_C_COMPILER_LAUNCHER=${{github.workspace}}/thirdparty/ccache-4.5.1/.install/bin/ccache
+            -DCMAKE_CXX_COMPILER_LAUNCHER=${{github.workspace}}/thirdparty/ccache-4.5.1/.install/bin/ccache
+            -DCMAKE_CUDA_COMPILER_LAUNCHER=${{github.workspace}}/thirdparty/ccache-4.5.1/.install/bin/ccache
             -DOPENCV_EXTRA_MODULES_PATH=${{github.workspace}}/thirdparty/opencv_contrib-${{env.OPENCV_VERSION}}/modules
             -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/thirdparty/opencv-${{env.OPENCV_VERSION}}/.install
             -DBUILD_LIST="core,imgproc,calib3d,highgui,features2d,flann,cudev,cudafeatures2d"
-            && make install -j2
+            && make install -j2 VERBOSE=1
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
@@ -113,9 +130,9 @@ jobs:
            -B ${{github.workspace}}/build
            -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
            -DBUILD_SHARED_LIBS=OFF
-           -DCMAKE_C_COMPILER_LAUNCHER=ccache
-           -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
-           -DCMAKE_CUDA_COMPILER_LAUNCHER=ccache
+           -DCMAKE_C_COMPILER_LAUNCHER=${{github.workspace}}/thirdparty/ccache-4.5.1/.install/bin/ccache
+           -DCMAKE_CXX_COMPILER_LAUNCHER=${{github.workspace}}/thirdparty/ccache-4.5.1/.install/bin/ccache
+           -DCMAKE_CUDA_COMPILER_LAUNCHER=${{github.workspace}}/thirdparty/ccache-4.5.1/.install/bin/ccache
            -DOpenCV_DIR=${{github.workspace}}/thirdparty/opencv-${{env.OPENCV_VERSION}}/.install/lib/cmake/opencv4
            -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/install
 
