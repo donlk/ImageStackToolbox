@@ -3,9 +3,8 @@
 //http://stackoverflow.com/questions/15911783/what-are-some-common-focus-stacking-algorithms
 
 #include "../../inc/imagestack/FocusImageStacker.h"
-
 #include "../../inc/image/Image.h"
-#include "../../inc/util/Utils.h"
+#include "../../inc/util/ImageUtils.h"
 #include "../../inc/util/Timer.h"
 
 #include <opencv2/imgproc.hpp>
@@ -28,17 +27,17 @@ FocusImageStacker::~FocusImageStacker(){
 	// NOOP
 }
 
-cv::Mat FocusImageStacker::stackImages(std::vector<cv::Mat> images){
+cv::Mat FocusImageStacker::stackImages(std::vector<cv::Mat> inImgs){
 	cout << "Computing the laplacian of the blurred images" << endl;
 
 	vector<cv::Mat> laplacianImages;
-	laplacianImages.resize(images.size());
+	laplacianImages.resize(inImgs.size());
 #ifdef USE_OPENMP
   #pragma omp parallel for schedule(dynamic)
 #endif
-	for(size_t i = 0; i < images.size(); ++i){
+	for(size_t i = 0; i < inImgs.size(); ++i){
 		//cout << "Laplacian [" << i << "/" << images.size() << "]" << endl;
-		cv::Mat laplacianImg = Utils::computeLaplacian(images[i]);
+		cv::Mat laplacianImg = ImageUtils::computeLaplacian(inImgs[i]);
 
 #ifdef USE_OPENMP
   #pragma omp critical
@@ -57,7 +56,11 @@ cv::Mat FocusImageStacker::stackImages(std::vector<cv::Mat> images){
 		cv::waitKey(0);*/
 	}
 
-	cv::Mat outImg = cv::Mat::zeros(images[0].rows, images[0].cols, images[0].type());
+	cv::Mat outImg = cv::Mat::zeros(
+		inImgs[0].rows,
+		inImgs[0].cols,
+		inImgs[0].type()
+	);
 
 	Timer timer;
 	timer.start();
@@ -78,7 +81,7 @@ cv::Mat FocusImageStacker::stackImages(std::vector<cv::Mat> images){
 					maxIntensityIdx = k;
 				}
 			}
-			pixelPerRow[x] = images[maxIntensityIdx].at<cv::Vec3b>(cv::Point(x,y));
+			pixelPerRow[x] = inImgs[maxIntensityIdx].at<cv::Vec3b>(cv::Point(x,y));
 		}
 	}
 

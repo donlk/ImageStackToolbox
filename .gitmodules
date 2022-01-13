@@ -7,3 +7,6 @@
 [submodule "thirdparty/cuda_akaze"]
 	path = thirdparty/cuda_akaze
 	url = https://github.com/donlk/cuda-akaze
+[submodule "petteri_aimonen_focus_stack"]
+	path = thirdparty/petteri_aimonen_focus_stack
+	url = https://github.com/donlk/focus-stack

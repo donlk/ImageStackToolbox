@@ -13,6 +13,7 @@ target_link_libraries(
     ${REQUIRED_OPENCV_LIBS}
     ${FAST_AKAZE_LIBRARY}
     ${CUDA_AKAZE_LIBRARY}
+    stdc++fs
 )
 
 add_test(unitTests unitTests ${PROJECT_SOURCE_DIR}/testfiles)

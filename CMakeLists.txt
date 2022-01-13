@@ -76,10 +76,12 @@ endif(OPENMP_FOUND)
 # ===================================================================
 # Library construction
 # ===================================================================
+message("PETTERI_AIMONEN_FOCUS_STACK_INCLUDE_DIR: ${PETTERI_AIMONEN_FOCUS_STACK_INCLUDE_DIR}")
 include_directories(
     ${CMDLINE_INCLUDE_DIR}
     ${FAST_AKAZE_INCLUDE_DIR}
     ${CUDA_AKAZE_INCLUDE_DIR}
+    ${PETTERI_AIMONEN_FOCUS_STACK_INCLUDE_DIR}
 )
 
 add_library(ist ${sources})

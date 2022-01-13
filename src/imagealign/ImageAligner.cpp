@@ -2,7 +2,6 @@
 
 #include "../../inc/image/Image.h"
 #include "../../inc/exceptions/InsufficientDataException.hpp"
-#include "../../inc/util/Utils.h"
 #include "../../inc/util/MatchUtils.h"
 
 #include <string>

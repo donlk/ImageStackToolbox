@@ -1,4 +1,4 @@
-#include "../inc/util/Utils.h"
+#include "../inc/util/ImageUtils.h"
 
 #include <string>
 
@@ -14,7 +14,7 @@ TEST(ISTTest, ImageDifference){
 	cv::Mat imgA = cv::imread(imgAPath);
 	cv::Mat imgB = cv::imread(imgBPath);
 
-	const double difference = Utils::computeImgDifference(imgA, imgB);
+	const double difference = ImageUtils::computeImgDifference(imgA, imgB);
 	EXPECT_DOUBLE_EQ(difference, 0.0093378662128897096);
 }
 
@@ -30,7 +30,7 @@ TEST(ISTTest, ImageLaplacian){
 	mat.at<cv::Vec3b>(2, 1) = cv::Vec3b(67,50,139);
 	mat.at<cv::Vec3b>(2, 2) = cv::Vec3b(19,8,139);
 
-	cv::Mat laplacianMat = Utils::computeLaplacian(mat);
+	cv::Mat laplacianMat = ImageUtils::computeLaplacian(mat);
 
 	cv::Vec3d laplacianSumVector;
 	cv::reduce(laplacianMat, laplacianSumVector, 1, cv::REDUCE_SUM, CV_64F);

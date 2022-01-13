@@ -1,4 +1,8 @@
 # Focus stacker example
-add_executable(IST_FocusStackExample FocusStackExample.cpp)
-target_link_libraries(IST_FocusStackExample ist stdc++fs ${REQUIRED_OPENCV_LIBS})
-install(TARGETS IST_FocusStackExample DESTINATION bin)
+add_executable(IST_BatchFocusStackExample BatchFocusStackExample.cpp)
+target_link_libraries(IST_BatchFocusStackExample ist ${REQUIRED_OPENCV_LIBS} stdc++fs)
+install(TARGETS IST_BatchFocusStackExample DESTINATION bin)
+
+add_executable(IST_BatchPetteriAimonenFocusStackExample BatchPetteriAimonenFocusStackExample.cpp)
+target_link_libraries(IST_BatchPetteriAimonenFocusStackExample ist ${PETTERI_AIMONEN_FOCUS_STACK_LIBRARY} ${REQUIRED_OPENCV_LIBS} stdc++fs)
+install(TARGETS IST_BatchPetteriAimonenFocusStackExample DESTINATION bin)

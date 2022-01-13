@@ -1,18 +1,9 @@
 #include "FileUtils.hpp"
 
 #include "../inc/image/Image.h"
-#include "../inc/imagealign/ImageAligner.h"
-#include "../inc/imagealign/CPUImageAligner.h"
-#include "../inc/imagealign/GPUImageAligner.h"
-#include "../inc/imagestack/FocusImageStacker.h"
-#include "../inc/imagestack/MeanImageStacker.h"
-#include "../inc/detectorextractor/OpenCVAKAZEDetectorExtractor.h"
-#include "../inc/detectorextractor/CudaAKAZEDetectorExtractor.h"
-#include "../inc/detectorextractor/OpenCVSIFTDetectorExtractor.h"
-#include "../inc/matcher/OpenCVBFMatcher.h"
-#include "../inc/matcher/OpenCVFlannMatcher.h"
-#include "../inc/util/Utils.h"
 #include "../inc/util/Timer.h"
+#include "../inc/util/ImageUtils.h"
+#include "../inc/imagestack/PetteriAimonenFocusImageStacker.h"
 
 #include <opencv2/opencv.hpp>
 #include <opencv2/imgcodecs/imgcodecs.hpp>
@@ -62,9 +53,7 @@ int main(int argc, char** argv){
 	Timer timer;
 	timer.start();
 
-	//auto imageAligner = make_shared<ImageAligner<OpenCVSIFTDetectorExtractor, OpenCVFlannMatcher> >();
-	auto imageAligner = make_shared<ImageAligner<CudaAKAZEDetectorExtractor, CudaAKAZEMatcher> >();
-	auto stacker = make_shared<FocusImageStacker>();
+	auto stacker = make_shared<PetteriAimonenFocusImageStacker>();
 	vector<shared_ptr<Image>> imgGroup;
 
 	//bool stopLoop = false;
@@ -87,7 +76,7 @@ int main(int argc, char** argv){
 			cv::imread(imgFilePaths[i+1].string())
 		);
 
-		const double diff = Utils::computeImgDifference(baseImg->getMat(), targetImg->getMat());
+		const double diff = ImageUtils::computeImgDifference(baseImg->getMat(), targetImg->getMat());
 		cout << targetImg->getName() << " diff: " << diff << endl;
 
 		bool isNewImageCluster = false;
@@ -120,8 +109,10 @@ int main(int argc, char** argv){
 		cout << "Difference threshold reached for [" << targetImg->getName() << "]:" << diff << endl;
 		cout << endl;
 
-		auto alignedImages = imageAligner->alignImages(imgGroup);
-		cv::Mat merged = stacker->stackImages(alignedImages);
+		vector<std::string> imageGroupPaths;
+		for(auto image: imgGroup){
+			imageGroupPaths.push_back(image->getPath());
+		}
 
 		std::ostringstream ss;
 		ss << std::setw(OUT_FILENAME_PADDING) << std::setfill('0') << stackedImgCount;
@@ -131,7 +122,8 @@ int main(int argc, char** argv){
 			+ ss.str()
 			+ baseImg->getExtension()
 		);
-		cv::imwrite(outFile, merged);
+
+		stacker->stackImages(imageGroupPaths, outFile);
 
 		stackedImgCount++;
 
