@@ -49,11 +49,6 @@ cv::Mat FocusImageStacker::stackImages(std::vector<cv::Mat> inImgs){
 			laplacianImages[i] = laplacianImg;
 			//laplacianImages.push_back(laplacianImg);
 		}
-
-		/*cv::namedWindow("laplac", cv::WINDOW_NORMAL);
-		cv::resizeWindow("laplac", imgLap.cols / 3, imgLap.rows / 3);
-		cv::imshow("laplac", imgLap);
-		cv::waitKey(0);*/
 	}
 
 	cv::Mat outImg = cv::Mat::zeros(
