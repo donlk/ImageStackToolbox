@@ -10,7 +10,7 @@ For the first use-case, one should simply use `ImageStackerBase` that provides c
 
 #### Dependencies
 ------------
- - OpenCV
+ - OpenCV (`core,imgproc,calib3d,highgui,features2d,flann,video,photo,cudev,cudafeatures2d`)
  - GTest (for unit tests)
 
 #### Building
