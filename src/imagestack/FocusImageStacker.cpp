@@ -1,6 +1,5 @@
 //This algorithm was inspired by the high-level description given at
-//
-//http://stackoverflow.com/questions/15911783/what-are-some-common-focus-stacking-algorithms
+//https://github.com/cmcguinness/focusstack
 
 #include "../../inc/imagestack/FocusImageStacker.h"
 #include "../../inc/image/Image.h"
