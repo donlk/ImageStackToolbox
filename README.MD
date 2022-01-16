@@ -22,8 +22,8 @@ cmake ../ -DOpenCV_DIR=<installed_opencv_dir> -DGTEST_ROOT=<installed_gtest_dir>
 ```
 
  -  Notes:
-    - To prevent using unsupported GCC versions for CUDA libraries, configure the project with the following CMake flag:
--DCUDA_HOST_COMPILER=/usr/bin/gcc-${GCC_VERSION}
+    - To prevent using unsupported GCC versions for CUDA libraries, configure the project with the following CMake flag:\
+    `-DCUDA_HOST_COMPILER=/usr/bin/gcc-${GCC_VERSION}`
 
 #### Running
 ------------
