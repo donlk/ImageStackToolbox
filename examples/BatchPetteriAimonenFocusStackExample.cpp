@@ -8,6 +8,8 @@
 #include <opencv2/opencv.hpp>
 #include <opencv2/imgcodecs/imgcodecs.hpp>
 
+#include <cmdline.h>
+
 #include <string>
 #include <vector>
 #include <iostream>
@@ -25,18 +27,21 @@ using namespace std;
 const int OUT_FILENAME_PADDING = 8;
 
 int main(int argc, char** argv){
-	if (argc != 3) {
-		cout << "Usage: <input_image_folder> <output_image_folder>" << std::endl;
-		return EXIT_FAILURE;
-	}
+	cmdline::parser cmdLineParser;
 
-	fs::path inFolderPath(argv[1]);
+	cmdLineParser.add<string>("input-image-folder", 'i', "The input image folder", true, "");
+	cmdLineParser.add<string>("output-image-folder", 'o', "The output image folder", true, "");
+
+	cmdLineParser.parse_check(argc, argv);
+
+	fs::path inFolderPath(cmdLineParser.get<string>("input-image-folder"));
+	fs::path outFolderPath(cmdLineParser.get<string>("output-image-folder"));
+
 	if(!fs::is_directory(inFolderPath)){
 		cerr<< "ERROR: Provided image folder is not a directory: " << inFolderPath.string() << endl;
 		return EXIT_FAILURE;
 	}
 
-	fs::path outFolderPath(argv[2]);
 	if(!fs::is_directory(outFolderPath)){
 		cout << "Output directory doesn't exist, creating: " << outFolderPath.string() << endl;
 		fs::create_directory(outFolderPath);

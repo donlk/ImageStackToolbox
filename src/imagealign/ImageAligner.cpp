@@ -2,6 +2,14 @@
 
 #include "../../inc/image/Image.h"
 #include "../../inc/exceptions/InsufficientDataException.hpp"
+#include "../../inc/detectorextractor/FastAKAZEDetectorExtractor.h"
+#include "../../inc/detectorextractor/OpenCVAKAZEDetectorExtractor.h"
+#include "../../inc/detectorextractor/CudaAKAZEDetectorExtractor.h"
+#include "../../inc/detectorextractor/OpenCVSIFTDetectorExtractor.h"
+#include "../../inc/matcher/OpenCVBFMatcher.h"
+#include "../../inc/matcher/OpenCVCudaBFMatcher.h"
+#include "../../inc/matcher/OpenCVFlannMatcher.h"
+#include "../../inc/matcher/CudaAKAZEMatcher.h"
 #include "../../inc/util/MatchUtils.h"
 
 #include <string>
@@ -31,28 +39,32 @@ std::vector<cv::Mat> ImageAligner<DetectorExtractorType, MatcherType>::alignImag
 	outImages.push_back(inImgs[0]->getMat());
 
 	timer.start();
+
 	vector<cv::KeyPoint> keypointsBase;
 	cv::Mat descriptorsBase;
 	detectorExtractor->detectAndCompute(inImgs[0]->getMat(), keypointsBase, descriptorsBase);
-	cout << "Features base image: " << keypointsBase.size() << ", TIME: " << timer.getElapsedMillis().count() << "ms" << endl;
+	cout
+		<< "Features base image: "
+		<< keypointsBase.size() <<
+		", TIME: "
+		<< timer.getElapsedMillis().count()
+		<< "ms"
+	<< endl;
 
-
-/*#ifdef USE_OPENMP
-  #pragma omp parallel for schedule(dynamic)
-#endif*/
 	for(size_t i = 1; i < inImgs.size(); ++i){
-#ifdef USE_OPENMP
-  #pragma omp critical
-#endif
-		{
-			cout << "Aligning image [" << i << "/" << inImgs.size() << "]" << endl;
-		}
+		cout << "Aligning image [" << i << "/" << inImgs.size() << "]" << endl;
 
 		vector<cv::KeyPoint> keypoints;
 		cv::Mat descriptors;
 		timer.start();
 		detectorExtractor->detectAndCompute(inImgs[i]->getMat(), keypoints, descriptors);
-		cout << "Features image: " << keypoints.size() << ", TIME: " << timer.getElapsedMillis().count() << "ms" << endl;
+		cout
+			<< "Features image: "
+			<< keypoints.size() <<
+			", TIME: "
+			<< timer.getElapsedMillis().count()
+			<< "ms"
+		<< endl;
 
 		timer.start();
 		std::vector<std::vector<cv::DMatch> > knnMatches = matcher->knnMatch(
@@ -62,7 +74,6 @@ std::vector<cv::Mat> ImageAligner<DetectorExtractorType, MatcherType>::alignImag
 		cout << "Matching TIME: " << timer.getElapsedMillis().count() << "ms" << endl;
 
 		vector<cv::KeyPoint> filteredKeypoints;
-		vector<cv::KeyPoint> filteredKeypointsBase;
 		std::vector<cv::Point2f> filteredPoints;
 		std::vector<cv::Point2f> filteredPointsBase;
 		std::vector<cv::DMatch> filteredMatches;
@@ -74,7 +85,6 @@ std::vector<cv::Mat> ImageAligner<DetectorExtractorType, MatcherType>::alignImag
 				|| match1.distance < MATCH_DISTANCE_RATIO_THRESHOLD * match2.distance
 			){
 				filteredKeypoints.push_back(keypoints[match1.queryIdx]);
-				filteredKeypointsBase.push_back(keypointsBase[match1.trainIdx]);
 				filteredPoints.push_back(keypoints[match1.queryIdx].pt);
 				filteredPointsBase.push_back(keypointsBase[match1.trainIdx].pt);
 				filteredMatches.push_back(match1);
@@ -91,14 +101,12 @@ std::vector<cv::Mat> ImageAligner<DetectorExtractorType, MatcherType>::alignImag
 		);
 
 		std::vector<cv::KeyPoint> goodKeyPoints;
-		std::vector<cv::KeyPoint> goodKeyPointsBase;
 		std::vector<cv::Point2f> goodPoints;
 		std::vector<cv::Point2f> goodPointsBase;
 		std::vector<cv::DMatch> goodMatches;
 		for (int i = 0; i < filteredPoints.size(); i++){
 			if (fStatusMat.at<unsigned char>(i) == 1){
 				goodKeyPoints.push_back(filteredKeypoints[i]);
-				goodKeyPointsBase.push_back(filteredKeypointsBase[i]);
 				goodPoints.push_back(filteredPoints[i]);
 				goodPointsBase.push_back(filteredPointsBase[i]);
 				goodMatches.push_back(filteredMatches[i]);
@@ -148,12 +156,28 @@ std::vector<cv::Mat> ImageAligner<DetectorExtractorType, MatcherType>::alignImag
 			cv::INTER_LINEAR,
 			cv::BORDER_CONSTANT
 		);
-#ifdef USE_OPENMP
-  #pragma omp critical
-#endif
-		{
-			outImages.push_back(newImg);
-		}
+		outImages.push_back(newImg);
 	}
 	return outImages;
+}
+
+std::shared_ptr<ImageAlignerBase> createImageAlignerFromParams(
+	const std::string& detectorExtractorType,
+	const std::string& matcherType
+){
+	if(detectorExtractorType == "FastAKAZEDetectorExtractor" && matcherType == "OpenCVFlannMatcher"){
+		return make_shared<ImageAligner<FastAKAZEDetectorExtractor, OpenCVFlannMatcher> >();
+	}else if(detectorExtractorType == "OpenCVAKAZEDetectorExtractor" && matcherType == "OpenCVFlannMatcher"){
+		return make_shared<ImageAligner<OpenCVAKAZEDetectorExtractor, OpenCVFlannMatcher> >();
+	}else if(detectorExtractorType == "CudaAKAZEDetectorExtractor" && matcherType == "OpenCVBFMatcher"){
+		return make_shared<ImageAligner<CudaAKAZEDetectorExtractor, OpenCVBFMatcher> >();
+	}else if(detectorExtractorType == "CudaAKAZEDetectorExtractor" && matcherType == "OpenCVCudaBFMatcher"){
+		return make_shared<ImageAligner<CudaAKAZEDetectorExtractor, OpenCVCudaBFMatcher> >();
+	}else if(detectorExtractorType == "CudaAKAZEDetectorExtractor" && matcherType == "CudaAKAZEMatcher"){
+		return make_shared<ImageAligner<CudaAKAZEDetectorExtractor, CudaAKAZEMatcher> >();
+	}else if(detectorExtractorType == "OpenCVSIFTDetectorExtractor" && matcherType == "OpenCVFlannMatcher"){
+		return make_shared<ImageAligner<OpenCVSIFTDetectorExtractor, OpenCVFlannMatcher> >();
+	}
+
+	throw runtime_error("Unsupported combination: " + detectorExtractorType + " + " + matcherType);
 }

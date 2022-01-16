@@ -6,6 +6,7 @@
 #include "../inc/imagealign/GPUImageAligner.h"
 #include "../inc/imagestack/FocusImageStacker.h"
 #include "../inc/imagestack/MeanImageStacker.h"
+#include "../inc/detectorextractor/FastAKAZEDetectorExtractor.h"
 #include "../inc/detectorextractor/OpenCVAKAZEDetectorExtractor.h"
 #include "../inc/detectorextractor/CudaAKAZEDetectorExtractor.h"
 #include "../inc/detectorextractor/OpenCVSIFTDetectorExtractor.h"
@@ -13,6 +14,8 @@
 #include "../inc/matcher/OpenCVFlannMatcher.h"
 #include "../inc/util/Timer.h"
 #include "../inc/util/ImageUtils.h"
+
+#include <cmdline.h>
 
 #include <opencv2/opencv.hpp>
 #include <opencv2/imgcodecs/imgcodecs.hpp>
@@ -35,18 +38,40 @@ using namespace std;
 const int OUT_FILENAME_PADDING = 8;
 
 int main(int argc, char** argv){
-	if (argc != 3) {
-		cout << "Usage: <input_image_folder> <output_image_folder>" << std::endl;
-		return EXIT_FAILURE;
-	}
+	cmdline::parser cmdLineParser;
 
-	fs::path inFolderPath(argv[1]);
+	cmdLineParser.add<string>("input-image-folder", 'i', "The input image folder", true, "");
+	cmdLineParser.add<string>("output-image-folder", 'o', "The output image folder", true, "");
+	cmdLineParser.add<string>(
+		"detectorExtractorType",
+		'd',
+		"The detector-extractor to use",
+		false,
+		"FastAKAZEDetectorExtractor"
+	);
+	cmdLineParser.add<string>(
+		"matcherType",
+		'm',
+		"The matcher to use",
+		false,
+		"OpenCVFlannMatcher"
+	);
+
+	cmdLineParser.parse_check(argc, argv);
+
+	fs::path inFolderPath(cmdLineParser.get<string>("input-image-folder"));
+	fs::path outFolderPath(cmdLineParser.get<string>("output-image-folder"));
+
+	auto imageAligner = createImageAlignerFromParams(
+		cmdLineParser.get<string>("detectorExtractorType"),
+		cmdLineParser.get<string>("matcherType")
+	);
+
 	if(!fs::is_directory(inFolderPath)){
 		cerr<< "ERROR: Provided image folder is not a directory: " << inFolderPath.string() << endl;
 		return EXIT_FAILURE;
 	}
 
-	fs::path outFolderPath(argv[2]);
 	if(!fs::is_directory(outFolderPath)){
 		cout << "Output directory doesn't exist, creating: " << outFolderPath.string() << endl;
 		fs::create_directory(outFolderPath);
@@ -63,8 +88,6 @@ int main(int argc, char** argv){
 	Timer timer;
 	timer.start();
 
-	//auto imageAligner = make_shared<ImageAligner<OpenCVSIFTDetectorExtractor, OpenCVFlannMatcher> >();
-	auto imageAligner = make_shared<ImageAligner<CudaAKAZEDetectorExtractor, CudaAKAZEMatcher> >();
 	auto stacker = make_shared<FocusImageStacker>();
 	vector<shared_ptr<Image>> imgGroup;
 

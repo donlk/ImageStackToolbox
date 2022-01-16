@@ -1,6 +1,7 @@
 #ifndef IMAGE_ALIGNER
 #define IMAGE_ALIGNER
 
+#include "ImageAlignerBase.h"
 #include "../detectorextractor/DetectorExtractorBase.h"
 #include "../image/Image.h"
 #include "../matcher/Matcher.h"
@@ -10,7 +11,7 @@
 #include <memory>
 
 template<class DetectorExtractorType, class MatcherType>
-class ImageAligner{
+class ImageAligner : public ImageAlignerBase{
 	static_assert(
 		std::is_base_of<DetectorExtractorBase, DetectorExtractorType>::value,
 		"DetectorExtractorType must inherit from DetectorExtractorBase!"
@@ -21,12 +22,11 @@ class ImageAligner{
 		"MatcherType must inherit from MatcherBase!"
 	);
 
-
 	public:
 		ImageAligner();
 		virtual ~ImageAligner();
 
-		std::vector<cv::Mat> alignImages(std::vector<std::shared_ptr<Image> > inImgs);
+		std::vector<cv::Mat> alignImages(std::vector<std::shared_ptr<Image> > inImgs) override;
 
 	private:
 		const float INLIER_ERROR_THRESHOLD = 2.5f;
@@ -37,5 +37,15 @@ class ImageAligner{
 
 		Timer timer;
 };
+
+/**
+** Creates an ImageAlignerBase instance based on the provided detectorExtractorType and matcherType-
+** The reason why this functions exists is to extract ImageAligner construction + sanity checks to one place
+** to avoid duplication wherever this class is instantiated.
+**/
+std::shared_ptr<ImageAlignerBase> createImageAlignerFromParams(
+	const std::string& detectorExtractorType,
+	const std::string& matcherType
+);
 
 #endif

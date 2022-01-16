@@ -1,4 +1,5 @@
 #include "../../inc/imagestack/PetteriAimonenFocusImageStacker.h"
+#include "../../inc/util/Timer.h"
 
 #include <options.hh>
 #include <focusstack.hh>
@@ -24,6 +25,9 @@ void PetteriAimonenFocusImageStacker::stackImages(
 	const std::vector<std::string> inImgPaths,
 	const std::string outImgPath
 ){
+	Timer timer;
+	timer.start();
+
 	FocusStack stack;
 
 	// Output file options
@@ -36,38 +40,19 @@ void PetteriAimonenFocusImageStacker::stackImages(
 	int flags = FocusStack::ALIGN_DEFAULT;
 	stack.set_align_flags(flags);
 
-	// Image merge options
-	//stack.set_consistency(std::stoi(options.get_arg("--consistency", "2")));
-	//stack.set_denoise(std::stof(options.get_arg("--denoise", "1.0")));
-
-	// Depth map generation options
-	//stack.set_depthmap_smooth_xy(std::stof(options.get_arg("--depthmap-smooth-xy", "16")));
-	//stack.set_depthmap_smooth_z(std::stof(options.get_arg("--depthmap-smooth-z", "32")));
-	//stack.set_depthmap_threshold(std::stoi(options.get_arg("--depthmap-threshold", "16")));
-	//stack.set_halo_radius(std::stof(options.get_arg("--halo-radius", "20")));
-	//stack.set_3dviewpoint(options.get_arg("--3dviewpoint", "0.5:1.0:0.5:2.0"));
-
-	// Performance options
-	/*if(options.has_flag("--threads")){
-		stack.set_threads(std::stoi(options.get_arg("--threads")));
-	}*/
-
-	//stack.set_disable_opencl(options.has_flag("--no-opencl"));
-
-	// Information options (some are handled at beginning of this function)
-	//stack.set_verbose(options.has_flag("--verbose"));
-
 	if(!stack.run()){
-		std::printf("\nError exit due to failed steps\n");
+		std::cout << "Error exit due to failed steps" << std::endl;
 	}
 
 	std::printf("\rSaved to %-40s\n", stack.get_output().c_str());
 
 	if(stack.get_depthmap() != ""){
-		std::printf("\rSaved depthmap to %s\n", stack.get_depthmap().c_str());
+		std::cout << "Saved depthmap to " << stack.get_depthmap() << std::endl;
 	}
 
 	if(stack.get_3dview() != ""){
-		std::printf("\rSaved 3D preview to %s\n", stack.get_3dview().c_str());
+		std::cout << "Saved 3D preview to " << stack.get_3dview() << std::endl;
 	}
+
+	cout << "Overall TIME: " << timer.getElapsedMillis().count() << "ms" << endl;
 }
