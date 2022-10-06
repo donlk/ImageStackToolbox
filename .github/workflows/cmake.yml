@@ -77,7 +77,6 @@ jobs:
     # Since cmake does not support a compiler launcher for nvcc natevly, we have to add it into it's configuration file.
     - name: Added ccache support for NVCC compiler invocation
       run: |
-            ls /usr/local/share*
             sudo sed -i '250 i \\nexecute_process(COMMAND echo "Before cuda compile.")' /usr/local/share/${{env.CMAKE_SYSTEM_FOLDER}}/Modules/FindCUDA/run_nvcc.cmake
             sudo sed -i '252 i execute_process(COMMAND ${CMAKE_CUDA_COMPILER_LAUNCHER} -s)' /usr/local/share/${{env.CMAKE_SYSTEM_FOLDER}}/Modules/FindCUDA/run_nvcc.cmake
             sudo sed -i '268 i \\nexecute_process(COMMAND echo "After cuda compile.")' /usr/local/share/${{env.CMAKE_SYSTEM_FOLDER}}/Modules/FindCUDA/run_nvcc.cmake
