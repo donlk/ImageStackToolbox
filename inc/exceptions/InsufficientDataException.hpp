@@ -1,3 +1,5 @@
+// Copyright (c) 2022 András Lehotay-Kéry
+
 #ifndef INSUFFICIENT_DATA_EXCEPTION
 #define INSUFFICIENT_DATA_EXCEPTION
 

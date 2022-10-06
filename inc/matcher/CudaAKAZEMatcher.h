@@ -1,3 +1,5 @@
+// Copyright (c) 2022 András Lehotay-Kéry
+
 #ifndef CUDA_AKAZE_MATCHER
 #define CUDA_AKAZE_MATCHER
 

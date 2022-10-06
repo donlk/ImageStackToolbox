@@ -1,3 +1,5 @@
+// Copyright (c) 2022 András Lehotay-Kéry
+
 #include "../../inc/matcher/OpenCVMatcher.h"
 
 template<class MatcherType>

@@ -1,3 +1,5 @@
+// Copyright (c) 2022 András Lehotay-Kéry
+
 #ifndef OPENCV_FLANN_MATCHER
 #define OPENCV_FLANN_MATCHER
 

@@ -1,3 +1,5 @@
+// Copyright (c) 2022 András Lehotay-Kéry
+
 //This algorithm was inspired by the high-level description given at
 //https://github.com/cmcguinness/focusstack
 

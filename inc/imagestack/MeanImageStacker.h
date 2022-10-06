@@ -1,3 +1,5 @@
+// Copyright (c) 2022 András Lehotay-Kéry
+
 #ifndef MEAN_IMAGE_STACKER
 #define MEAN_IMAGE_STACKER
 

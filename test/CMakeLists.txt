@@ -1,3 +1,5 @@
+# Copyright (c) 2022 András Lehotay-Kéry
+
 cmake_minimum_required(VERSION 2.8)
 
 set(UNIT_TEST_SOURES "unitTests.cpp")

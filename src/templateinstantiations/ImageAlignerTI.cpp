@@ -1,3 +1,5 @@
+// Copyright (c) 2022 András Lehotay-Kéry
+
 #include "../imagealign/ImageAligner.cpp"
 
 #include "../../inc/detectorextractor/CudaAKAZEDetectorExtractor.h"

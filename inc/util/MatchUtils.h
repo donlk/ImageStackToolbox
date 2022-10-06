@@ -1,3 +1,5 @@
+// Copyright (c) 2022 András Lehotay-Kéry
+
 #ifndef MATCH_FILTER_UTILS
 #define MATCH_FILTER_UTILS
 

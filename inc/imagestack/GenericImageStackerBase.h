@@ -1,3 +1,5 @@
+// Copyright (c) 2022 András Lehotay-Kéry
+
 #ifndef GENERIC_IMAGE_STACKER_BASE
 #define GENERIC_IMAGE_STACKER_BASE
 

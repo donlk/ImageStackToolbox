@@ -1,3 +1,5 @@
+// Copyright (c) 2022 András Lehotay-Kéry
+
 #include "../../inc/detectorextractor/CudaAKAZEDetectorExtractor.h"
 
 #include <cuda_akaze/src/lib/utils.h>

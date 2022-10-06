@@ -1,3 +1,5 @@
+// Copyright (c) 2022 András Lehotay-Kéry
+
 #ifndef OPENCV_MATCHER
 #define OPENCV_MATCHER
 

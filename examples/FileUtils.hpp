@@ -1,3 +1,5 @@
+// Copyright (c) 2022 András Lehotay-Kéry
+
 #ifndef EXAMPLES_FILEUTILS
 #define EXAMPLES_FILEUTILS
 

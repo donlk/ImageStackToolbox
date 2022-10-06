@@ -1,3 +1,5 @@
+// Copyright (c) 2022 András Lehotay-Kéry
+
 #ifndef IMAGE_ALIGNER_BASE
 #define IMAGE_ALIGNER_BASE
 

@@ -1,3 +1,5 @@
+# Copyright (c) 2022 András Lehotay-Kéry
+
 # Focus stacker example
 add_executable(IST_BatchFocusStackExample BatchFocusStackExample.cpp)
 target_link_libraries(IST_BatchFocusStackExample ist ${REQUIRED_OPENCV_LIBS} stdc++fs)

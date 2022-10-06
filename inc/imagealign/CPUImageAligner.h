@@ -1,3 +1,5 @@
+// Copyright (c) 2022 András Lehotay-Kéry
+
 #ifndef CPU_IMAGE_ALIGNER
 #define CPU_IMAGE_ALIGNER
 

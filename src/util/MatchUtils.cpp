@@ -1,3 +1,5 @@
+// Copyright (c) 2022 András Lehotay-Kéry
+
 #include "../../inc/util/MatchUtils.h"
 
 using namespace std;

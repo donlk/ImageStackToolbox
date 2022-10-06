@@ -1,3 +1,5 @@
+// Copyright (c) 2022 András Lehotay-Kéry
+
 #include "../../inc/imagestack/MeanImageStacker.h"
 #include "../../inc/image/Image.h"
 #include "../../inc/util/ImageUtils.h"

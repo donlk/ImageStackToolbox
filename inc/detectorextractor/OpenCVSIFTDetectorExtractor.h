@@ -1,3 +1,5 @@
+// Copyright (c) 2022 András Lehotay-Kéry
+
 #ifndef OPENCV_SIFT_DETECTOR_EXTRACTOR
 #define OPENCV_SIFT_DETECTOR_EXTRACTOR
 

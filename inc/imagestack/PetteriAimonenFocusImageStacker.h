@@ -1,3 +1,5 @@
+// Copyright (c) 2022 András Lehotay-Kéry
+
 #ifndef PETTERI_AIMONEN_FOCUS_IMAGE_STACKER
 #define PETTERI_AIMONEN_FOCUS_IMAGE_STACKER
 

@@ -1,3 +1,5 @@
+// Copyright (c) 2022 András Lehotay-Kéry
+
 #include "../../inc/detectorextractor/OpenCVSIFTDetectorExtractor.h"
 
 #include <opencv2/features2d/features2d.hpp>

@@ -1,3 +1,5 @@
+// Copyright (c) 2022 András Lehotay-Kéry
+
 #ifndef OPENCV_AKAZE_DETECTOR_EXTRACTOR
 #define OPENCV_AKAZE_DETECTOR_EXTRACTOR
 

@@ -1,3 +1,5 @@
+// Copyright (c) 2022 András Lehotay-Kéry
+
 #include "FileUtils.hpp"
 
 #include "../inc/image/Image.h"

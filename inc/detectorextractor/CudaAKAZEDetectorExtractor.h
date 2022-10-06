@@ -1,3 +1,5 @@
+// Copyright (c) 2022 András Lehotay-Kéry
+
 #ifndef CUDA_AKAZE_DETECTOR_EXTRACTOR
 #define CUDA_AKAZE_DETECTOR_EXTRACTOR
 

@@ -1,3 +1,5 @@
+// Copyright (c) 2022 András Lehotay-Kéry
+
 #ifndef DETECTOR_EXTRACTOR_BASE
 #define DETECTOR_EXTRACTOR_BASE
 

@@ -1,3 +1,5 @@
+// Copyright (c) 2022 András Lehotay-Kéry
+
 #include "../../inc/imagealign/ImageAligner.h"
 
 #include "../../inc/image/Image.h"

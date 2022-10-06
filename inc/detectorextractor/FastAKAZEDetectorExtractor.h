@@ -1,3 +1,5 @@
+// Copyright (c) 2022 András Lehotay-Kéry
+
 #ifndef FAST_AKAZE_DETECTOR_EXTRACTOR
 #define FAST_AKAZE_DETECTOR_EXTRACTOR
 

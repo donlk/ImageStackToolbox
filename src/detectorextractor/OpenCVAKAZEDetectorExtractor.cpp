@@ -1,3 +1,5 @@
+// Copyright (c) 2022 András Lehotay-Kéry
+
 #include <opencv2/features2d.hpp>
 #include "../../inc/detectorextractor/OpenCVAKAZEDetectorExtractor.h"
 

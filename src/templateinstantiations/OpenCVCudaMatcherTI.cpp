@@ -1,3 +1,5 @@
+// Copyright (c) 2022 András Lehotay-Kéry
+
 #include "../matcher/OpenCVCudaMatcher.cpp"
 
 #include "../../inc/matcher/OpenCVCudaBFMatcher.h"

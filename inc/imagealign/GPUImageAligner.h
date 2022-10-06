@@ -1,3 +1,5 @@
+// Copyright (c) 2022 András Lehotay-Kéry
+
 #ifndef GPU_IMAGE_ALIGNER
 #define GPU_IMAGE_ALIGNER
 

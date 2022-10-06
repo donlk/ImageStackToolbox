@@ -1,3 +1,5 @@
+// Copyright (c) 2022 András Lehotay-Kéry
+
 #ifndef OPENCV_CUDA_MATCHER
 #define OPENCV_CUDA_MATCHER
 

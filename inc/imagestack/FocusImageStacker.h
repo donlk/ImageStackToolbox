@@ -1,3 +1,5 @@
+// Copyright (c) 2022 András Lehotay-Kéry
+
 #ifndef FOCUS_IMAGE_STACKER
 #define FOCUS_IMAGE_STACKER
 

@@ -1,3 +1,5 @@
+// Copyright (c) 2022 András Lehotay-Kéry
+
 #include "../matcher/OpenCVMatcher.cpp"
 
 #include "../../inc/matcher/OpenCVBFMatcher.h"

@@ -1,3 +1,5 @@
+// Copyright (c) 2022 András Lehotay-Kéry
+
 #include <fast_akaze/fast_akaze/features2d_akaze2.hpp>
 
 #include "../../inc/detectorextractor/FastAKAZEDetectorExtractor.h"
