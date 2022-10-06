@@ -13,6 +13,7 @@ env:
   BUILD_TYPE: Release
   OPENCV_VERSION: 4.5.0
   CCACHE_VERSION: 4.5.1
+  CMAKE_SYSTEM_FOLDER: cmake-3.24
   CCACHE_DIR: /home/runner/.ccache
 
 jobs:   
@@ -77,13 +78,13 @@ jobs:
     - name: Added ccache support for NVCC compiler invocation
       run: |
             ls /usr/local/share*
-            sudo sed -i '250 i \\nexecute_process(COMMAND echo "Before cuda compile.")' /usr/local/share/cmake-3.22/Modules/FindCUDA/run_nvcc.cmake
-            sudo sed -i '252 i execute_process(COMMAND ${CMAKE_CUDA_COMPILER_LAUNCHER} -s)' /usr/local/share/cmake-3.22/Modules/FindCUDA/run_nvcc.cmake
-            sudo sed -i '268 i \\nexecute_process(COMMAND echo "After cuda compile.")' /usr/local/share/cmake-3.22/Modules/FindCUDA/run_nvcc.cmake
-            sudo sed -i '270 i execute_process(COMMAND  ${CMAKE_CUDA_COMPILER_LAUNCHER} -s)' /usr/local/share/cmake-3.22/Modules/FindCUDA/run_nvcc.cmake
-            sudo sed -i '/^set(CUDA_NVCC_EXECUTABLE.*/i set(CMAKE_CUDA_COMPILER_LAUNCHER "@CMAKE_CUDA_COMPILER_LAUNCHER@") # path' /usr/local/share/cmake-3.22/Modules/FindCUDA/run_nvcc.cmake
-            sudo sed -i ':a;N;$!ba;s/COMMAND "${CUDA_NVCC_EXECUTABLE}"\n  "${source_file}"/COMMAND ${CMAKE_CUDA_COMPILER_LAUNCHER}\n  "${CUDA_NVCC_EXECUTABLE}"\n  "${source_file}"/g' /usr/local/share/cmake-3.22/Modules/FindCUDA/run_nvcc.cmake
-            cat /usr/local/share/cmake-3.22/Modules/FindCUDA/run_nvcc.cmake
+            sudo sed -i '250 i \\nexecute_process(COMMAND echo "Before cuda compile.")' /usr/local/share/${{env.CMAKE_SYSTEM_FOLDER}}/Modules/FindCUDA/run_nvcc.cmake
+            sudo sed -i '252 i execute_process(COMMAND ${CMAKE_CUDA_COMPILER_LAUNCHER} -s)' /usr/local/share/${{env.CMAKE_SYSTEM_FOLDER}}/Modules/FindCUDA/run_nvcc.cmake
+            sudo sed -i '268 i \\nexecute_process(COMMAND echo "After cuda compile.")' /usr/local/share/${{env.CMAKE_SYSTEM_FOLDER}}/Modules/FindCUDA/run_nvcc.cmake
+            sudo sed -i '270 i execute_process(COMMAND  ${CMAKE_CUDA_COMPILER_LAUNCHER} -s)' /usr/local/share/${{env.CMAKE_SYSTEM_FOLDER}}/Modules/FindCUDA/run_nvcc.cmake
+            sudo sed -i '/^set(CUDA_NVCC_EXECUTABLE.*/i set(CMAKE_CUDA_COMPILER_LAUNCHER "@CMAKE_CUDA_COMPILER_LAUNCHER@") # path' /usr/local/share/${{env.CMAKE_SYSTEM_FOLDER}}/Modules/FindCUDA/run_nvcc.cmake
+            sudo sed -i ':a;N;$!ba;s/COMMAND "${CUDA_NVCC_EXECUTABLE}"\n  "${source_file}"/COMMAND ${CMAKE_CUDA_COMPILER_LAUNCHER}\n  "${CUDA_NVCC_EXECUTABLE}"\n  "${source_file}"/g' /usr/local/share/${{env.CMAKE_SYSTEM_FOLDER}}/Modules/FindCUDA/run_nvcc.cmake
+            cat /usr/local/share/${{env.CMAKE_SYSTEM_FOLDER}}/Modules/FindCUDA/run_nvcc.cmake
             
     - name: Install cuda-toolkit 
       uses: Jimver/cuda-toolkit@v0.2.5
