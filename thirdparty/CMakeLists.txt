@@ -1,3 +1,5 @@
+# Copyright (c) 2022 András Lehotay-Kéry
+
 # cmdline
 set(CMDLINE_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/cmdline" PARENT_SCOPE)
 
